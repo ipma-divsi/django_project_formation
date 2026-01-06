@@ -1,0 +1,222 @@
+/* ==========================
+   RESET & BODY
+========================== */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f8ff; /* Azul claro IPMA */
+}
+
+/* ==========================
+   HEADER & MENU SUPERIOR
+========================== */
+header {
+    background-color: #0077B6; /* Azul IPMA */
+    padding: 15px 20px;
+}
+
+.topnav {
+    display: flex;
+    gap: 15px;
+}
+
+.topnav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+}
+
+.topnav a:hover {
+    background-color: #005f8f;
+}
+
+/* ==========================
+   FOOTER
+========================== */
+footer {
+    background-color: #0077B6; /* Azul IPMA */
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+/* ==========================
+   LOGIN / REGISTO
+========================== */
+.login-box {
+    background-color: white;
+    padding: 30px 40px;
+    border-radius: 10px;
+    width: 350px;
+    max-width: 90%;
+    margin: 80px auto;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-box input {
+    width: 100%;
+    padding: 12px 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.login-box button {
+    width: 100%;
+    padding: 12px;
+    background-color: #0077B6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+.login-box button:hover {
+    background-color: #005f8f;
+}
+
+.login-box .links {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-box .links a {
+    color: #0077B6;
+    text-decoration: none;
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.login-box .links a:hover {
+    text-decoration: underline;
+}
+
+/* ==========================
+   DASHBOARD / LAYOUT PRINCIPAL
+========================== */
+.main-container {
+    display: flex;
+    min-height: 80vh;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 220px;
+    background-color: #0077B6; /* Azul IPMA */
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    position: sticky;
+    top: 20px;
+    height: fit-content;
+}
+
+.sidebar h3 {
+    margin: 0 0 15px 0;
+}
+
+.sidebar a {
+    color: white;
+    display: block;
+    margin: 10px 0;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.sidebar a:hover {
+    text-decoration: underline;
+}
+
+/* Conteúdo principal */
+.dashboard-main, .content {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+/* Cards */
+.card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+/* Observações individuais */
+.observacao, .obs-card {
+    margin-bottom: 15px;
+    padding: 12px;
+    border-left: 4px solid #0077B6;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+}
+
+.observacao strong, .obs-card strong {
+    font-weight: bold;
+}
+
+/* Botões dentro das observações */
+.obs-card a {
+    display: inline-block;
+    margin-top: 5px;
+    margin-right: 10px;
+    padding: 5px 10px;
+    font-size: 14px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+}
+
+.btn-editar {
+    background-color: #1976D2; /* Azul */
+}
+
+.btn-editar:hover {
+    background-color: #135BA1;
+}
+
+.btn-deletar {
+    background-color: #D32F2F; /* Vermelho */
+}
+
+.btn-deletar:hover {
+    background-color: #A52727;
+}
+
+/* Feed global */
+.feed-card {
+    margin-bottom: 15px;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.feed-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+}
+
+.feed-card p {
+    margin: 5px 0;
+}

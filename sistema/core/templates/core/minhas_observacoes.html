@@ -1,0 +1,46 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Minhas Observações{% endblock %}
+
+{% block content %}
+<div class="dashboard-main">
+    <h1>Minhas Observações</h1>
+
+    {% for message in messages %}
+        <p style="color: green;">{{ message }}</p>
+    {% endfor %}
+
+    <!-- Formulário para adicionar nova observação -->
+    <div class="card">
+        <h3>Adicionar Nova Observação</h3>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn-editar">Adicionar</button>
+        </form>
+    </div>
+
+    <!-- Lista de Observações -->
+    <div class="card">
+        <h3>Observações</h3>
+        {% if observacoes %}
+            {% for obs in observacoes %}
+                <div class="obs-card">
+                    <strong>{{ obs.titulo }} ({{ obs.tipo }})</strong><br>
+                    Local: {{ obs.local }}<br>
+                    Valor: {{ obs.valor }}<br>
+                    <small>Criado em {{ obs.created_at|date:"d/m/Y H:i" }}</small><br>
+                    <!-- Botões de Editar e Deletar -->
+                    <a href="{% url 'editar_observacao' obs.id %}" class="btn-editar">Editar</a>
+                    <form method="post" action="{% url 'deletar_observacao' obs.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-deletar">Deletar</button>
+                    </form>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Você ainda não tem observações.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Editar Observação{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-main" style="flex-grow:1; padding:20px;">
+        <h1>Editar Observação</h1>
+        {% for message in messages %}
+            <p style="color: green;">{{ message }}</p>
+        {% endfor %}
+        <div class="card">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Salvar Alterações</button>
+                <a href="{% url 'dashboard' %}" style="margin-left: 10px; text-decoration:none;">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

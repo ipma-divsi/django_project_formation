@@ -1,0 +1,27 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Feed IPMA{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+
+
+    <!-- Área principal do feed -->
+    <div class="dashboard-main">
+        <h1>Feed de Observações</h1>
+
+        {% if observacoes %}
+            {% for obs in observacoes %}
+                <div class="card feed-card">
+                    <strong>{{ obs.titulo }} ({{ obs.tipo }})</strong><br>
+                    <p>Local: {{ obs.local }}</p>
+                    <p>Valor: {{ obs.valor }}</p>
+                    <small>Publicado por: <strong>{{ obs.user.username }}</strong> em {{ obs.created_at|date:"d/m/Y H:i" }}</small>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Nenhuma observação publicada ainda.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

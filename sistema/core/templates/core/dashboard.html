@@ -1,0 +1,74 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Dashboard IPMA{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+
+    <!-- Área principal -->
+    <div class="dashboard-main">
+        <h1>Bem-vindo, {{ user.username }}!</h1>
+
+        <!-- Informações do usuário -->
+        <div class="card">
+            <h3>Informações do usuário</h3>
+            <p>Username: {{ user.username }}</p>
+            <p>Email: {{ user.email }}</p>
+        </div>
+
+        <!-- Formulário de adicionar observação -->
+        <div class="card">
+            <h3>Adicionar Observação</h3>
+            {% for message in messages %}
+                <p style="color: green;">{{ message }}</p>
+            {% endfor %}
+
+            <form method="post" action="{% url 'minhas_observacoes' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Adicionar</button>
+            </form>
+
+            {% if form.errors %}
+                <ul style="color:red;">
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <li>{{ field.label }}: {{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+
+        <!-- Lista de observações do usuário -->
+        <div class="card">
+            <h3>Minhas Observações</h3>
+            {% for obs in observacoes %}
+                <div class="obs-card">
+                    <strong>{{ obs.titulo }} ({{ obs.tipo }})</strong><br>
+                    Local: {{ obs.local }}<br>
+                    Valor: {{ obs.valor }}<br>
+                    <small>{{ obs.created_at|date:"d/m/Y H:i" }}</small><br>
+
+                    <!-- Botão de editar -->
+                    <a class="btn-editar" href="{% url 'editar_observacao' obs.pk %}">Editar</a>
+
+                    <!-- Botão de deletar -->
+                    <form method="post" action="{% url 'deletar_observacao' obs.pk %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-deletar">Deletar</button>
+                    </form>
+                </div>
+            {% empty %}
+                <p>Não tens observações ainda.</p>
+            {% endfor %}
+        </div>
+
+        <!-- Outras informações -->
+        <div class="card">
+            <h3>Outras informações</h3>
+            <p>Aqui podes adicionar estatísticas, gráficos ou outras funcionalidades relacionadas com meteorologia/marinha.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Perfil{% endblock %}
+
+{% block content %}
+<div class="dashboard-main">
+    <h1>Perfil de {{ user.username }}</h1>
+    <div class="card">
+        <h3>Informações do usuário</h3>
+        <p><strong>Username:</strong> {{ user.username }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+    </div>
+</div>
+{% endblock %}

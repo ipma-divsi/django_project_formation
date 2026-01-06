@@ -1,0 +1,19 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Deletar Observação{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-main" style="flex-grow:1; padding:20px;">
+        <h1>Deletar Observação</h1>
+        <div class="card">
+            <p>Tem certeza que deseja deletar a observação "<strong>{{ observacao.titulo }}</strong>"?</p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" style="background-color:#D32F2F; color:white;">Deletar</button>
+                <a href="{% url 'dashboard' %}" style="margin-left: 10px; text-decoration:none;">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
