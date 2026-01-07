@@ -91,4 +91,4 @@ django_project_formation/
 
 Luis belchior
 Orientador: <teu nome>
-# Projeto de Estágio – Luis belchior
+# Projeto de Estágio – Luis Belchior
