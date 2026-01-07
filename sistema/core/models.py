@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
+# Para observações
 TIPOS_OBSERVACAO = [
     ('Temp', 'Temperatura'),
     ('Precip', 'Precipitação'),
@@ -19,3 +22,27 @@ class Observacao(models.Model):
 
     def __str__(self):
         return f"{self.titulo} ({self.tipo}) - {self.local}"
+
+
+# Modelo para perfil avançado do usuário
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    foto = models.ImageField(upload_to='profile_pics/', default='default.jpg')
+    bio = models.TextField(blank=True, null=True)
+    data_nascimento = models.DateField(blank=True, null=True)
+
+    def __str__(self):
+        return f"Perfil de {self.user.username}"
+
+
+# -------------------------
+# SIGNALS: cria e salva Profile automaticamente
+# -------------------------
+@receiver(post_save, sender=User)
+def criar_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def salvar_profile(sender, instance, **kwargs):
+    instance.profile.save()

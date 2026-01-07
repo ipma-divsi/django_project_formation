@@ -5,14 +5,18 @@ body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f0f8ff; /* Azul claro IPMA */
+    background-color: #f0f8ff; /* Azul claro */
 }
 
 /* ==========================
-   HEADER & MENU SUPERIOR
+   HEADER, MENU SUPERIOR & FOOTER
 ========================== */
+header, footer, .sidebar {
+    background-color: #0077B6; /* Azul principal */
+    color: white;
+}
+
 header {
-    background-color: #0077B6; /* Azul IPMA */
     padding: 15px 20px;
 }
 
@@ -34,12 +38,7 @@ header {
     background-color: #005f8f;
 }
 
-/* ==========================
-   FOOTER
-========================== */
 footer {
-    background-color: #0077B6; /* Azul IPMA */
-    color: white;
     text-align: center;
     padding: 10px;
     position: fixed;
@@ -120,9 +119,6 @@ footer {
 
 /* Sidebar */
 .sidebar {
-    width: 220px;
-    background-color: #0077B6; /* Azul IPMA */
-    color: white;
     padding: 20px;
     border-radius: 10px;
     position: sticky;
@@ -152,71 +148,143 @@ footer {
     padding: 20px;
 }
 
-/* Cards */
-.card {
+/* ==========================
+   CARDS
+========================== */
+.card, .feed-card, .perfil-card, .obs-card, .observacao {
     background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     margin-bottom: 20px;
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-/* Observações individuais */
-.observacao, .obs-card {
-    margin-bottom: 15px;
-    padding: 12px;
-    border-left: 4px solid #0077B6;
-    background-color: #f9f9f9;
-    border-radius: 6px;
+.feed-card:hover, .perfil-card:hover, .obs-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 
-.observacao strong, .obs-card strong {
+.feed-card p, .observacao strong, .obs-card strong {
+    margin: 5px 0;
     font-weight: bold;
 }
 
-/* Botões dentro das observações */
-.obs-card a {
+/* ==========================
+   OBSERVAÇÕES
+========================== */
+.observacao, .obs-card {
+    border-left: 5px solid #0077B6;
+    background-color: #f9f9f9;
+    padding: 15px;
+}
+
+.obs-card a, .obs-card button {
     display: inline-block;
-    margin-top: 5px;
+    margin-top: 8px;
     margin-right: 10px;
-    padding: 5px 10px;
+    padding: 6px 12px;
     font-size: 14px;
-    border-radius: 5px;
+    border-radius: 6px;
     text-decoration: none;
+    color: white;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.btn-editar { background-color: #1976D2; }
+.btn-editar:hover { background-color: #135BA1; }
+
+.btn-deletar { background-color: #D32F2F; }
+.btn-deletar:hover { background-color: #A52727; }
+
+/* ==========================
+   PERFIL
+========================== */
+.perfil-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.perfil-card {
+    flex: 1 1 300px;
+    text-align: center;
+}
+
+.perfil-card img {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #0077B6;
+    margin-bottom: 15px;
+}
+
+.perfil-card h3, .obs-card strong {
+    font-size: 18px;
+    color: #0077B6;
+    margin-bottom: 10px;
+}
+
+/* Formulários no perfil */
+.perfil-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.perfil-form input,
+.perfil-form textarea,
+.perfil-form select {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+.perfil-form button {
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
     color: white;
 }
 
-.btn-editar {
-    background-color: #1976D2; /* Azul */
+.btn-perfil-save {
+    background-color: #2E7D32; /* Verde */
 }
 
-.btn-editar:hover {
-    background-color: #135BA1;
+.btn-perfil-save:hover {
+    background-color: #27632A;
 }
 
-.btn-deletar {
-    background-color: #D32F2F; /* Vermelho */
+.btn-perfil-password {
+    background-color: #1565C0; /* Azul */
 }
 
-.btn-deletar:hover {
-    background-color: #A52727;
+.btn-perfil-password:hover {
+    background-color: #0F438A;
 }
 
-/* Feed global */
-.feed-card {
+/* ==========================
+   MENSAGENS DE SUCESSO / ERRO
+========================== */
+.message {
+    padding: 10px;
     margin-bottom: 15px;
-    padding: 15px;
-    border-radius: 10px;
-    background-color: #ffffff;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-    transition: transform 0.2s;
+    border-radius: 5px;
+    color: white;
 }
 
-.feed-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+.message-success {
+    background-color: #2E7D32;
 }
 
-.feed-card p {
-    margin: 5px 0;
+.message-error {
+    background-color: #D32F2F;
 }

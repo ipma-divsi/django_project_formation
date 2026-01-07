@@ -1,17 +1,16 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .models import Observacao
-from .forms import ObservacaoForm
+from .models import Observacao, Profile
+from .forms import ObservacaoForm, UserUpdateForm, ProfileUpdateForm, CustomPasswordChangeForm
 
 # -------------------------
 # PÁGINA INICIAL
 # -------------------------
 def home(request):
     return render(request, 'core/home.html')
-
 
 # -------------------------
 # LOGIN
@@ -30,14 +29,12 @@ def login_view(request):
 
     return render(request, 'core/login.html')
 
-
 # -------------------------
 # LOGOUT
 # -------------------------
 def logout_view(request):
     logout(request)
     return redirect('home')
-
 
 # -------------------------
 # REGISTRO DE NOVOS USUÁRIOS
@@ -63,12 +60,13 @@ def register_view(request):
             return render(request, 'core/register.html')
 
         # Criar usuário
-        User.objects.create_user(username=username, email=email, password=password1)
+        user = User.objects.create_user(username=username, email=email, password=password1)
+        # Criar perfil vazio para o usuário
+        Profile.objects.create(user=user)
         messages.success(request, "Conta criada com sucesso! Já podes fazer login.")
         return redirect('login')
 
     return render(request, 'core/register.html')
-
 
 # -------------------------
 # DASHBOARD
@@ -76,7 +74,7 @@ def register_view(request):
 @login_required
 def dashboard(request):
     """Dashboard com informações do usuário, CRUD de observações e outros cards."""
-    
+
     # Processar form de adicionar observação
     if request.method == 'POST':
         form = ObservacaoForm(request.POST)
@@ -96,7 +94,6 @@ def dashboard(request):
         'form': form,
         'observacoes': observacoes
     })
-
 
 # -------------------------
 # MINHAS OBSERVAÇÕES (CRUD)
@@ -122,7 +119,6 @@ def minhas_observacoes(request):
         'form': form
     })
 
-
 @login_required
 def editar_observacao(request, pk):
     obs = get_object_or_404(Observacao, pk=pk, user=request.user)
@@ -137,7 +133,6 @@ def editar_observacao(request, pk):
 
     return render(request, 'core/editar_observacao.html', {'form': form, 'observacao': obs})
 
-
 @login_required
 def deletar_observacao(request, pk):
     obs = get_object_or_404(Observacao, pk=pk, user=request.user)
@@ -148,7 +143,6 @@ def deletar_observacao(request, pk):
 
     return render(request, 'core/deletar_observacao.html', {'observacao': obs})
 
-
 # -------------------------
 # FEED GLOBAL
 # -------------------------
@@ -158,10 +152,46 @@ def feed(request):
     observacoes = Observacao.objects.all().order_by('-created_at')
     return render(request, 'core/feed.html', {'observacoes': observacoes})
 
-
 # -------------------------
 # PERFIL
 # -------------------------
 @login_required
 def perfil(request):
-    return render(request, 'core/perfil.html', {'user': request.user})
+    """Perfil interativo: editar dados, foto, bio, data de nascimento e senha."""
+    # Inicializar formulários com dados atuais do usuário
+    if request.method == 'POST':
+        user_form = UserUpdateForm(request.POST, instance=request.user)
+        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+        password_form = CustomPasswordChangeForm(user=request.user, data=request.POST)
+
+        # Verificar qual formulário foi enviado
+        if 'update_profile' in request.POST:
+            if user_form.is_valid() and profile_form.is_valid():
+                user_form.save()
+                profile_form.save()
+                messages.success(request, "Perfil atualizado com sucesso!")
+                return redirect('perfil')
+
+        elif 'change_password' in request.POST:
+            if password_form.is_valid():
+                user = password_form.save()
+                update_session_auth_hash(request, user)  # Mantém o usuário logado
+                messages.success(request, "Senha alterada com sucesso!")
+                return redirect('perfil')
+    else:
+        user_form = UserUpdateForm(instance=request.user)
+        profile_form = ProfileUpdateForm(instance=request.user.profile)
+        password_form = CustomPasswordChangeForm(user=request.user)
+
+    context = {
+        'user_form': user_form,
+        'profile_form': profile_form,
+        'password_form': password_form,
+    }
+    return render(request, 'core/perfil.html', context)
+
+@login_required
+def minhas_observacoes(request):
+    observacoes = Observacao.objects.filter(user=request.user).order_by('-created_at')
+    form = ObservacaoForm()
+    return render(request, 'core/minhas_observacoes.html', {'observacoes': observacoes, 'form': form})

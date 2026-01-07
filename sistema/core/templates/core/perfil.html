@@ -1,14 +1,92 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
 {% block title %}Perfil{% endblock %}
 
 {% block content %}
-<div class="dashboard-main">
-    <h1>Perfil de {{ user.username }}</h1>
-    <div class="card">
-        <h3>Informações do usuário</h3>
-        <p><strong>Username:</strong> {{ user.username }}</p>
-        <p><strong>Email:</strong> {{ user.email }}</p>
+<div class="dashboard-container">
+
+    <div class="dashboard-main">
+        <h1>Perfil de {{ user.username }}</h1>
+
+        <!-- Mensagens de sucesso ou erro -->
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+                <div class="message message-success">{{ message }}</div>
+            {% elif message.tags == 'error' %}
+                <div class="message message-error">{{ message }}</div>
+            {% endif %}
+        {% endfor %}
+
+        <!-- Container dos cards de perfil e formulários -->
+        <div class="perfil-container">
+
+            <!-- Card 1: Foto e informações básicas -->
+            <div class="perfil-card">
+                <img src="{% static 'core/default.jpg' %}" alt="My image">
+
+
+                <p><strong>Username:</strong> {{ user.username }}</p>
+                <p><strong>Email:</strong> {{ user.email }}</p>
+                {% if user.profile.bio %}
+                    <p><strong>Bio:</strong> {{ user.profile.bio }}</p>
+                {% endif %}
+                {% if user.profile.data_nascimento %}
+                    <p><strong>Data de Nascimento:</strong> {{ user.profile.data_nascimento|date:"d/m/Y" }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Card 2: Editar perfil -->
+            <div class="perfil-card">
+                <h3>Editar Perfil</h3>
+                <form method="post" enctype="multipart/form-data" class="perfil-form">
+                    {% csrf_token %}
+                    {{ user_form.as_p }}
+                    {{ profile_form.as_p }}
+                    <button type="submit" name="update_profile" class="btn-perfil-save">Salvar alterações</button>
+                </form>
+            </div>
+
+            <!-- Card 3: Alterar senha -->
+            <div class="perfil-card">
+                <h3>Alterar Senha</h3>
+                <form method="post" class="perfil-form">
+                    {% csrf_token %}
+                    {{ password_form.as_p }}
+                    <button type="submit" name="change_password" class="btn-perfil-password">Alterar senha</button>
+                </form>
+            </div>
+
+            <!-- Card 4: Adicionar nova observação -->
+            <div class="perfil-card">
+                <h3>Adicionar Observação</h3>
+                <form method="post" class="perfil-form">
+                    {% csrf_token %}
+                    {{ obs_form.as_p }}
+                    <button type="submit" class="btn-perfil-save">Adicionar</button>
+                </form>
+            </div>
+
+        </div>
+
+        <!-- Cards das observações do usuário -->
+        <h2>Minhas Observações</h2>
+        <div class="observacoes-container">
+            {% for obs in observacoes %}
+                <div class="obs-card">
+                    <strong>{{ obs.titulo }}</strong>
+                    <p><strong>Tipo:</strong> {{ obs.tipo }}</p>
+                    <p><strong>Local:</strong> {{ obs.local }}</p>
+                    <p><strong>Valor:</strong> {{ obs.valor }}</p>
+                    <p><small>{{ obs.created_at|date:"d/m/Y H:i" }}</small></p>
+                    <a href="{% url 'editar_observacao' obs.pk %}" class="btn-editar">Editar</a>
+                    <a href="{% url 'deletar_observacao' obs.pk %}" class="btn-deletar">Deletar</a>
+                </div>
+            {% empty %}
+                <p>Ainda não tens observações adicionadas.</p>
+            {% endfor %}
+        </div>
+
     </div>
 </div>
 {% endblock %}

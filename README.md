@@ -20,6 +20,7 @@ Este projeto consiste no desenvolvimento de um sistema web chamado "IPEMA" inspi
 # Pré-requisitos
 # - Python 3.13+ 
 # - Git instalado
+# - Pillow instalado
 # - Pip atualizado
 
 # Clonar o repositório

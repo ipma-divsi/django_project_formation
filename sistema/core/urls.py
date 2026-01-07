@@ -14,15 +14,13 @@ urlpatterns = [
     path('dashboard/', dashboard, name='dashboard'),
 
     # Minhas observações (CRUD)
-   path('minhas-observacoes/', minhas_observacoes, name='minhas_observacoes'),
+    path('minhas-observacoes/', minhas_observacoes, name='minhas_observacoes'),
     path('editar/<int:pk>/', editar_observacao, name='editar_observacao'),
     path('deletar/<int:pk>/', deletar_observacao, name='deletar_observacao'),
 
     # Feed global
     path('feed/', feed, name='feed'),
 
-
-path('perfil/', perfil, name='perfil'),
-
+    # Perfil do usuário
+    path('perfil/', perfil, name='perfil'),
 ]
-

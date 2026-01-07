@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'core',  
+    'core',  # teu app principal
 ]
 
 
@@ -57,7 +58,7 @@ ROOT_URLCONF = 'sistema.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [],  # podes adicionar pastas extra se quiser
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -116,5 +117,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
+STATIC_URL = "core/static/"
 
-STATIC_URL = 'static/'
+# -------------------------
+# Configuração para arquivos de media (upload de fotos)
+# -------------------------
+MEDIA_URL = '/media/'  # URL pública para acessar os arquivos
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # pasta física onde os arquivos serão salvos
