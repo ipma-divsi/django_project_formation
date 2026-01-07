@@ -17,26 +17,46 @@ Este projeto consiste no desenvolvimento de um sistema web chamado "IPEMA" inspi
 
 ## ▶️ Como executar
 ```bash
-# Clonar repositório
-git clone <https://github.com/ipma-divsi/django_project_formation.git>
+# Pré-requisitos
+# - Python 3.13+ 
+# - Git instalado
+# - Pip atualizado
+
+# Clonar o repositório
+git clone https://github.com/ipma-divsi/django_project_formation.git
 
 # Entrar na pasta do projeto
 cd django_project_formation
 
-# Criar e ativar ambiente virtual
+# Criar ambiente virtual
 python -m venv venv
-# Windows
-venv\Scripts\activate
-# Linux/Mac
+
+# Ativar ambiente virtual
+# Windows (PowerShell)
+venv\Scripts\Activate.ps1
+
+# Windows (CMD)
+venv\Scripts\activate.bat
+
+# Linux / Mac
 source venv/bin/activate
 
+# Atualizar pip
+python -m pip install --upgrade pip
+
 # Instalar dependências
-pip install -r requirements.txt
+pip install django
+
+# Entrar na pasta onde está o manage.py
+cd sistema
 
 # Criar base de dados e aplicar migrações
 python manage.py migrate
 
-# Executar servidor
+# Criar superutilizador (opcional)
+python manage.py createsuperuser
+
+# Executar o servidor
 python manage.py runserver
 
 
