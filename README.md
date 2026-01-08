@@ -89,6 +89,6 @@ django_project_formation/
 
 ## 👤 Autor
 
-Luis belchior
+Ana
 Orientador: <teu nome>
 # Projeto de Estágio – Luis belchior

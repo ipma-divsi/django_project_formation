@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ aviso.titulo }}</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef3f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        /* BOTÃO VOLTAR */
+        .btn-voltar {
+            display: inline-block;
+            margin-bottom: 20px;
+            text-decoration: none;
+            background: #003366;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .btn-voltar:hover {
+            background: #00509e;
+        }
+
+        h1 {
+            color: #003366;
+            margin-top: 0;
+        }
+
+        .nivel {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .nivel.verde { background: green; }
+        .nivel.amarelo { background: #f1c40f; color: black; }
+        .nivel.laranja { background: orange; }
+        .nivel.vermelho { background: red; }
+
+        hr {
+            margin: 30px 0;
+        }
+
+        /* COMENTÁRIOS */
+        .titulo-comentarios {
+            color: #003366;
+        }
+
+        .comentarios {
+            margin-top: 15px;
+        }
+
+        .comentario {
+            background: #f7f9fb;
+            border-left: 4px solid #003366;
+            padding: 10px 15px;
+            margin-bottom: 12px;
+            border-radius: 4px;
+        }
+
+        .comentario-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .sem-comentarios {
+            color: #777;
+            font-style: italic;
+        }
+
+        /* FORMULÁRIO */
+        .form-comentario {
+            margin-top: 25px;
+            background: #f2f6fa;
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        .form-comentario input,
+        .form-comentario textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        .form-comentario button {
+            background: #003366;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .form-comentario button:hover {
+            background: #00509e;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- BOTÃO VOLTAR -->
+    <a href="/" class="btn-voltar">⬅ Voltar ao Inicio</a>
+
+    <h1>{{ aviso.titulo }}</h1>
+
+    <span class="nivel {{ aviso.nivel }}">
+        {{ aviso.get_nivel_display }}
+    </span>
+
+    <p>{{ aviso.descricao }}</p>
+
+    <hr>
+
+    <!-- COMENTÁRIOS -->
+    <h2 class="titulo-comentarios">💬 Comentários</h2>
+
+    <div class="comentarios">
+        {% for comentario in comentarios %}
+            <div class="comentario">
+                <div class="comentario-header">
+                    <strong>{{ comentario.nome }}</strong>
+                    <span>{{ comentario.criado_em|date:"d/m/Y H:i" }}</span>
+                </div>
+                <p>{{ comentario.texto }}</p>
+            </div>
+        {% empty %}
+            <p class="sem-comentarios">Ainda não há comentários.</p>
+        {% endfor %}
+    </div>
+
+    <!-- FORMULÁRIO -->
+    <div class="form-comentario">
+        <h3>Adicionar comentário</h3>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+
+</div>
+
+</body>
+</html>
