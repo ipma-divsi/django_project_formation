@@ -62,10 +62,8 @@ def register_view(request):
             messages.error(request, "Este email já está em uso")
             return render(request, 'core/register.html')
 
-        # Criar usuário
+        # Criar usuário (o signal em models.py já cria o Profile automaticamente)
         user = User.objects.create_user(username=username, email=email, password=password1)
-        # Criar perfil vazio para o usuário
-        Profile.objects.create(user=user)
         messages.success(request, "Conta criada com sucesso! Já podes fazer login.")
         return redirect('login')
 
