@@ -6,6 +6,63 @@
     <title>{% block title %}Sistema{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'core/style.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset básico para html e body */
+        html, body {
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* Body flexível para empurrar footer para baixo */
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Main ocupa o espaço restante */
+        main.content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        /* Header / Menu superior com azul do IPMA */
+        header {
+            background-color: #1584C0; /* azul IPMA */
+            color: white;
+        }
+
+        nav.topnav {
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+        }
+
+        nav.topnav a {
+            color: white; /* links brancos no header azul */
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        nav.topnav a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer compacto com azul IPMA */
+        footer {
+            text-align: center;
+            padding: 10px 0;      /* menos espaço vertical */
+            background-color: #1584C0;
+            color: white;
+            font-size: 12px;     /* fonte menor */
+        }
+
+        footer p {
+            margin: 0;           /* remove margem padrão do parágrafo */
+        }
+    </style>
 </head>
 <body>
     <!-- Header com menu superior -->
@@ -15,7 +72,7 @@
             {% if user.is_authenticated %}
                 <a href="{% url 'dashboard' %}">Minhas Observações</a>
                 <a href="{% url 'feed' %}">Feed</a>
-                <a href="/perfil/">Perfil</a>  <!-- Link para perfil -->
+                <a href="/perfil/">Perfil</a>
                 <a href="{% url 'logout' %}">Logout</a>
             {% else %}
                 <a href="{% url 'login' %}">Login</a>
@@ -29,7 +86,7 @@
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Footer -->
+    <!-- Footer compacto -->
     <footer>
         <p>&copy; IPEMA</p>
     </footer>
