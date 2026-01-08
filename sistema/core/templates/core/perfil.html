@@ -145,7 +145,11 @@
 
             <!-- Card 1: Foto e info básica -->
             <div class="perfil-card">
-                <img src="{% static 'core/default.png' %}" alt="Profile Image" style="width:100%; border-radius:8px; margin-bottom:10px;">
+                {% if user.profile.foto %}
+                    <img src="{{ user.profile.foto.url }}" alt="Profile Image" style="width:100%; border-radius:8px; margin-bottom:10px;">
+                {% else %}
+                    <img src="{% static 'core/default.png' %}" alt="Profile Image" style="width:100%; border-radius:8px; margin-bottom:10px;">
+                {% endif %}
                 <p><strong>Username:</strong> {{ user.username }}</p>
                 <p><strong>Email:</strong> {{ user.email }}</p>
                 {% if user.profile.bio %}

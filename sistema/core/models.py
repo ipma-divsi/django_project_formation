@@ -27,7 +27,7 @@ class Observacao(models.Model):
 # Modelo para perfil avançado do usuário
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    foto = models.ImageField(upload_to='profile_pics/', default='default.jpg')
+    foto = models.ImageField(upload_to='profile_pics/', default='profile_pics/default.png')
     bio = models.TextField(blank=True, null=True)
     data_nascimento = models.DateField(blank=True, null=True)
 
