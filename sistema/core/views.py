@@ -12,6 +12,7 @@ from .forms import ObservacaoForm, UserUpdateForm, ProfileUpdateForm, CustomPass
 def home(request):
     return render(request, 'core/home.html')
 
+
 # -------------------------
 # LOGIN
 # -------------------------
@@ -29,12 +30,14 @@ def login_view(request):
 
     return render(request, 'core/login.html')
 
+
 # -------------------------
 # LOGOUT
 # -------------------------
 def logout_view(request):
     logout(request)
     return redirect('home')
+
 
 # -------------------------
 # REGISTRO DE NOVOS USUÁRIOS
@@ -68,6 +71,7 @@ def register_view(request):
 
     return render(request, 'core/register.html')
 
+
 # -------------------------
 # DASHBOARD
 # -------------------------
@@ -83,11 +87,10 @@ def dashboard(request):
             nova_obs.user = request.user
             nova_obs.save()
             messages.success(request, "Observação adicionada com sucesso!")
-            return redirect('dashboard')  # redireciona para atualizar a lista
+            return redirect('dashboard')
     else:
         form = ObservacaoForm()
 
-    # Buscar todas as observações do usuário para mostrar no dashboard
     observacoes = Observacao.objects.filter(user=request.user).order_by('-created_at')
 
     return render(request, 'core/dashboard.html', {
@@ -95,12 +98,12 @@ def dashboard(request):
         'observacoes': observacoes
     })
 
+
 # -------------------------
 # MINHAS OBSERVAÇÕES (CRUD)
 # -------------------------
 @login_required
 def minhas_observacoes(request):
-    """Lista e permite adicionar observações do usuário."""
     observacoes = Observacao.objects.filter(user=request.user).order_by('-created_at')
 
     if request.method == 'POST':
@@ -119,6 +122,7 @@ def minhas_observacoes(request):
         'form': form
     })
 
+
 @login_required
 def editar_observacao(request, pk):
     obs = get_object_or_404(Observacao, pk=pk, user=request.user)
@@ -133,6 +137,7 @@ def editar_observacao(request, pk):
 
     return render(request, 'core/editar_observacao.html', {'form': form, 'observacao': obs})
 
+
 @login_required
 def deletar_observacao(request, pk):
     obs = get_object_or_404(Observacao, pk=pk, user=request.user)
@@ -143,55 +148,68 @@ def deletar_observacao(request, pk):
 
     return render(request, 'core/deletar_observacao.html', {'observacao': obs})
 
+
 # -------------------------
 # FEED GLOBAL
 # -------------------------
 @login_required
 def feed(request):
-    """Feed global estilo Twitter: mostra todas as observações de todos os usuários."""
     observacoes = Observacao.objects.all().order_by('-created_at')
     return render(request, 'core/feed.html', {'observacoes': observacoes})
+
 
 # -------------------------
 # PERFIL
 # -------------------------
 @login_required
 def perfil(request):
-    """Perfil interativo: editar dados, foto, bio, data de nascimento e senha."""
-    # Inicializar formulários com dados atuais do usuário
-    if request.method == 'POST':
-        user_form = UserUpdateForm(request.POST, instance=request.user)
-        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
-        password_form = CustomPasswordChangeForm(user=request.user, data=request.POST)
+    """Perfil interativo: editar dados, foto, bio, data de nascimento, senha e observações."""
 
-        # Verificar qual formulário foi enviado
+    # Inicializar formulários
+    user_form = UserUpdateForm(instance=request.user)
+    profile_form = ProfileUpdateForm(instance=request.user.profile)
+    password_form = CustomPasswordChangeForm(user=request.user)
+    obs_form = ObservacaoForm()
+
+    # Buscar observações do usuário
+    observacoes = Observacao.objects.filter(user=request.user).order_by('-created_at')
+
+    if request.method == 'POST':
+        # Atualizar perfil
         if 'update_profile' in request.POST:
+            user_form = UserUpdateForm(request.POST, instance=request.user)
+            profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
             if user_form.is_valid() and profile_form.is_valid():
                 user_form.save()
                 profile_form.save()
                 messages.success(request, "Perfil atualizado com sucesso!")
                 return redirect('perfil')
 
+        # Alterar senha
         elif 'change_password' in request.POST:
+            password_form = CustomPasswordChangeForm(user=request.user, data=request.POST)
             if password_form.is_valid():
                 user = password_form.save()
-                update_session_auth_hash(request, user)  # Mantém o usuário logado
+                update_session_auth_hash(request, user)
                 messages.success(request, "Senha alterada com sucesso!")
                 return redirect('perfil')
-    else:
-        user_form = UserUpdateForm(instance=request.user)
-        profile_form = ProfileUpdateForm(instance=request.user.profile)
-        password_form = CustomPasswordChangeForm(user=request.user)
+
+        # Adicionar observação
+        elif 'add_obs' in request.POST:
+            obs_form = ObservacaoForm(request.POST)
+            if obs_form.is_valid():
+                nova_obs = obs_form.save(commit=False)
+                nova_obs.user = request.user
+                nova_obs.save()
+                messages.success(request, "Observação adicionada com sucesso!")
+                return redirect('perfil')
 
     context = {
         'user_form': user_form,
         'profile_form': profile_form,
         'password_form': password_form,
+        'obs_form': obs_form,
+        'observacoes': observacoes,
     }
-    return render(request, 'core/perfil.html', context)
 
-@login_required
-def minhas_observacoes(request):
-    observacoes = Observacao.objects.filter(user=request.user).order_by('-created_at')
-    form = ObservacaoForm()
-    return render(request, 'core/minhas_observacoes.html', {'observacoes': observacoes, 'form': form})
+    return render(request, 'core/perfil.html', context)

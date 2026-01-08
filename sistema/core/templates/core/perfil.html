@@ -6,26 +6,146 @@
 {% block content %}
 <div class="dashboard-container">
 
+    <style>
+        /* Container principal dos cards */
+        .perfil-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            max-width: 900px; /* largura total da "tabela" menor */
+            margin: 0 auto;
+        }
+
+        /* Cada card */
+        .perfil-card {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            width: 280px;
+        }
+
+        /* Centralizar conteúdo dentro dos cards de formulário */
+        .perfil-card form {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* centraliza inputs e labels */
+        }
+
+        .perfil-card .form-group {
+            width: 100%;
+            max-width: 220px; /* largura dos inputs menor e centralizada */
+            text-align: center; /* centraliza o texto do label */
+            margin-bottom: 12px;
+        }
+
+        .perfil-card .form-group input,
+        .perfil-card .form-group textarea {
+            width: 100%;
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            text-align: center; /* centraliza o texto digitado */
+        }
+
+        .perfil-card .form-group label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* Botões azuis arredondados */
+        .btn-perfil-save,
+        .btn-editar {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 10px;
+            background-color: #1976D2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-perfil-save:hover,
+        .btn-editar:hover {
+            background-color: #1565C0;
+        }
+
+        /* Botão deletar vermelho */
+        .btn-deletar {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 10px;
+            background-color: #D32F2F;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-deletar:hover {
+            background-color: #B71C1C;
+        }
+
+        /* Container das observações */
+        .observacoes-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .obs-card {
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+            width: 250px;
+        }
+
+        /* Mensagens de sucesso e erro */
+        .message-success {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .message-error {
+            background-color: #D32F2F;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+    </style>
+
     <div class="dashboard-main">
         <h1>Perfil de {{ user.username }}</h1>
 
-        <!-- Mensagens de sucesso ou erro -->
+        <!-- Mensagens -->
         {% for message in messages %}
             {% if message.tags == 'success' %}
-                <div class="message message-success">{{ message }}</div>
+                <div class="message-success">{{ message }}</div>
             {% elif message.tags == 'error' %}
-                <div class="message message-error">{{ message }}</div>
+                <div class="message-error">{{ message }}</div>
             {% endif %}
         {% endfor %}
 
-        <!-- Container dos cards de perfil e formulários -->
+        <!-- Container dos cards -->
         <div class="perfil-container">
 
-            <!-- Card 1: Foto e informações básicas -->
+            <!-- Card 1: Foto e info básica -->
             <div class="perfil-card">
-                <img src="{% static 'core/default.jpg' %}" alt="My image">
-
-
+                <img src="{% static 'core/default.png' %}" alt="Profile Image" style="width:100%; border-radius:8px; margin-bottom:10px;">
                 <p><strong>Username:</strong> {{ user.username }}</p>
                 <p><strong>Email:</strong> {{ user.email }}</p>
                 {% if user.profile.bio %}
@@ -36,13 +156,42 @@
                 {% endif %}
             </div>
 
-            <!-- Card 2: Editar perfil -->
+            <!-- Card 2: Editar perfil (simplificado e centralizado) -->
             <div class="perfil-card">
                 <h3>Editar Perfil</h3>
-                <form method="post" enctype="multipart/form-data" class="perfil-form">
+                <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
-                    {{ user_form.as_p }}
-                    {{ profile_form.as_p }}
+
+                    <!-- Username -->
+                    <div class="form-group">
+                        <label for="id_username">Username</label>
+                        {{ user_form.username }}
+                    </div>
+
+                    <!-- Email -->
+                    <div class="form-group">
+                        <label for="id_email">Email</label>
+                        {{ user_form.email }}
+                    </div>
+
+                    <!-- Foto -->
+                    <div class="form-group">
+                        <label for="id_foto">Foto</label>
+                        {{ profile_form.foto }}
+                    </div>
+
+                    <!-- Bio -->
+                    <div class="form-group">
+                        <label for="id_bio">Bio</label>
+                        {{ profile_form.bio }}
+                    </div>
+
+                    <!-- Data de nascimento -->
+                    <div class="form-group">
+                        <label for="id_data_nascimento">Data de nascimento</label>
+                        {{ profile_form.data_nascimento }}
+                    </div>
+
                     <button type="submit" name="update_profile" class="btn-perfil-save">Salvar alterações</button>
                 </form>
             </div>
@@ -50,27 +199,27 @@
             <!-- Card 3: Alterar senha -->
             <div class="perfil-card">
                 <h3>Alterar Senha</h3>
-                <form method="post" class="perfil-form">
+                <form method="post">
                     {% csrf_token %}
                     {{ password_form.as_p }}
-                    <button type="submit" name="change_password" class="btn-perfil-password">Alterar senha</button>
+                    <button type="submit" name="change_password" class="btn-perfil-save">Alterar senha</button>
                 </form>
             </div>
 
             <!-- Card 4: Adicionar nova observação -->
             <div class="perfil-card">
                 <h3>Adicionar Observação</h3>
-                <form method="post" class="perfil-form">
+                <form method="post">
                     {% csrf_token %}
                     {{ obs_form.as_p }}
-                    <button type="submit" class="btn-perfil-save">Adicionar</button>
+                    <button type="submit" name="add_obs" class="btn-perfil-save">Adicionar</button>
                 </form>
             </div>
 
         </div>
 
-        <!-- Cards das observações do usuário -->
-        <h2>Minhas Observações</h2>
+        <!-- Observações do usuário -->
+        <h2 style="text-align:center; margin-top:30px;">Minhas Observações</h2>
         <div class="observacoes-container">
             {% for obs in observacoes %}
                 <div class="obs-card">
@@ -83,7 +232,7 @@
                     <a href="{% url 'deletar_observacao' obs.pk %}" class="btn-deletar">Deletar</a>
                 </div>
             {% empty %}
-                <p>Ainda não tens observações adicionadas.</p>
+                <p style="text-align:center; width:100%;">Ainda não tens observações adicionadas.</p>
             {% endfor %}
         </div>
 
