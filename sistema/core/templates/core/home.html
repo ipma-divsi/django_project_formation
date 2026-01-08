@@ -15,8 +15,14 @@
         </p>
 
         {% if not user.is_authenticated %}
-            <a href="/login/" class="btn-editar" style="margin-top: 20px; display: inline-block;">Entrar</a>
-            <a href="/register/" class="btn-editar" style="margin-top: 20px; display: inline-block; background-color:#1976D2;">Registar</a>
+            <a href="{% url 'login' %}" class="btn-editar" 
+               style="margin-top: 20px; margin-right: 10px; padding: 10px 30px; background-color:#1976D2; color:white; border-radius:8px; text-decoration:none; display:inline-block; transition: background-color 0.3s;">
+               Entrar
+            </a>
+            <a href="{% url 'register' %}" class="btn-editar" 
+               style="margin-top: 20px; padding: 10px 30px; background-color:#1976D2; color:white; border-radius:8px; text-decoration:none; display:inline-block; transition: background-color 0.3s;">
+               Registar
+            </a>
         {% endif %}
     </div>
 
@@ -31,4 +37,17 @@
     </div>
 
 </div>
+
+<!-- Script para efeito hover -->
+<script>
+    const buttons = document.querySelectorAll('.btn-editar');
+    buttons.forEach(btn => {
+        btn.addEventListener('mouseenter', () => {
+            btn.style.backgroundColor = '#4791DB'; // Azul mais claro ao passar o mouse
+        });
+        btn.addEventListener('mouseleave', () => {
+            btn.style.backgroundColor = '#1976D2'; // Volta ao azul original
+        });
+    });
+</script>
 {% endblock %}
