@@ -167,24 +167,29 @@ a {
 
 <div class="top-bar">
     <span>Previsão Meteorológica em Tempo Real</span>
-    <a href="/admin/">Login Admin</a>
+    
 </div>
 
 <div class="container">
-
+                
     <!-- AVISOS -->
     <div class="avisos">
         <h3>⚠️ Avisos</h3>
     
         {% for aviso in avisos %}
             <div class="aviso"
-                 style="border-color: {{ aviso.nivel }};" 
-                 onclick="window.location.href='/aviso/{{ aviso.id }}/'">
+                onclick="location.href='{% url 'detalhe_aviso' aviso.id %}'"
+                 style="border-left: 6px solid
+                 {% if aviso.nivel == 'verde' %}green
+                 {% elif aviso.nivel == 'amarelo' %}orange
+                 {% elif aviso.nivel == 'laranja' %}darkorange
+                 {% elif aviso.nivel == 'vermelho' %}red
+                 {% endif %};">
                 <strong>{{ aviso.titulo }}</strong><br>
                 {{ aviso.descricao|truncatechars:80 }}
             </div>
         {% empty %}
-            <p>Sem avisos no momento.</p>
+            <p>Sem avisos Meteorológico.</p>
         {% endfor %}
     </div>
 
@@ -194,6 +199,7 @@ a {
 </div>
 
 <script>
+    
     // Limites de Portugal
     var limitesPortugal = [
         [36.8, -9.6],

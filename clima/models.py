@@ -28,14 +28,29 @@ class Comentario(models.Model):
     aviso = models.ForeignKey(
         AvisoMeteorologico,
         on_delete=models.CASCADE,
-        related_name="comentarios"
+        related_name="comentarios",
+        null=True,
+        blank=True
+    )
+    aviso_mar = models.ForeignKey(
+        "AvisoMar",  # note as aspas
+        on_delete=models.CASCADE,
+        related_name="comentarios_mar",
+        null=True,
+        blank=True
     )
     nome = models.CharField(max_length=50)
     texto = models.TextField()
     data = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.nome} - {self.aviso.titulo}"
+        if self.aviso:
+            return f"{self.nome} - {self.aviso.titulo}"
+        elif self.aviso_mar:
+            return f"{self.nome} - {self.aviso_mar.titulo}"
+        else:
+            return self.nome
+
 
 
 class Praia(models.Model):
@@ -67,4 +82,3 @@ class AvisoMar(models.Model):
 
     def __str__(self):
         return self.titulo
- 

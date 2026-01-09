@@ -1,11 +1,18 @@
 from django.contrib import admin
-from .models import AvisoMeteorologico, Comentario, Praia, AvisoMar
+from .models import AvisoMeteorologico, AvisoMar, Comentario, Praia
 
 
 @admin.register(AvisoMeteorologico)
 class AvisoMeteorologicoAdmin(admin.ModelAdmin):
     list_display = ('titulo', 'tipo', 'nivel', 'data')
     list_filter = ('tipo', 'nivel')
+    search_fields = ('titulo', 'descricao')
+
+
+@admin.register(AvisoMar)
+class AvisoMarAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'nivel', 'data')
+    list_filter = ('nivel',)
     search_fields = ('titulo', 'descricao')
 
 
@@ -23,10 +30,3 @@ class PraiaAdmin(admin.ModelAdmin):
         'direcao_onda',
         'temp_agua',
     )
-
-@admin.register(AvisoMar)
-class AvisoMarAdmin(admin.ModelAdmin):
-    list_display = ('titulo', 'nivel', 'data')  # removi 'tipo'
-    list_filter = ('nivel',)                    # removi 'tipo'
-    search_fields = ('titulo', 'descricao')
- 
