@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from .models import Observacao, Profile
 from .forms import ObservacaoForm, UserUpdateForm, ProfileUpdateForm, CustomPasswordChangeForm
+import requests
+import json
 
 # -------------------------
 # PÁGINA INICIAL
@@ -211,3 +213,65 @@ def perfil(request):
     }
 
     return render(request, 'core/perfil.html', context)
+
+
+def mapa(request):
+    """Página com mapa das observações. Opcional: filtrar por usuário via ?user=username"""
+    user_filter = request.GET.get('user')
+    if user_filter:
+        observacoes = Observacao.objects.filter(user__username=user_filter, latitude__isnull=False, longitude__isnull=False).select_related('user').order_by('-created_at')
+    else:
+        observacoes = Observacao.objects.filter(latitude__isnull=False, longitude__isnull=False).select_related('user').order_by('-created_at')
+
+    markers = []
+
+    for obs in observacoes:
+        # Usar coordenadas armazenadas (sem geocoding na view)
+        lat = obs.latitude
+        lon = obs.longitude
+
+        if lat is None or lon is None:
+            continue
+
+        # Extrair intensidade numérica com valores reais (sem normalizar)
+        intensity = None
+        try:
+            import re
+            v = str(obs.valor).strip()
+            v = v.replace(',', '.')
+            # Extrai primeiro número encontrado
+            m = re.search(r"(\d+(?:\.\d+)?)", v)
+            if m:
+                intensity = float(m.group(1))
+        except Exception:
+            intensity = None
+
+        # Determinar unidade por tipo
+        unidade = ''
+        if obs.tipo == 'Temp':
+            unidade = '°C'
+        elif obs.tipo == 'Precip':
+            unidade = 'mm'
+        elif obs.tipo == 'Vento':
+            unidade = 'km/h'
+        elif obs.tipo == 'Ondas':
+            unidade = 'm'
+        elif obs.tipo == 'Sismos':
+            unidade = 'magnitude'
+
+        markers.append({
+            'lat': float(lat),
+            'lng': float(lon),
+            'titulo': obs.titulo,
+            'user': obs.user.username,
+            'tipo': obs.tipo,
+            'tipo_display': obs.get_tipo_display(),
+            'local': obs.local,
+            'valor': obs.valor,
+            'unidade': unidade,
+            'created_at': obs.created_at.isoformat(),
+            'intensity': intensity,
+        })
+
+    markers_json = json.dumps(markers)
+    return render(request, 'core/mapa.html', {'markers_json': markers_json})
