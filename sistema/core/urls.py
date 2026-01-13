@@ -4,13 +4,14 @@ from .views import (
     editar_observacao, deletar_observacao, feed, minhas_observacoes,
     perfil, mapa, view_clima
 )
+app_name = "core"
 
 urlpatterns = [
     path('', home, name='home'),
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
     path('register/', register_view, name='register'),
-    path('clima/', include('clima.urls')),
+
     path('dashboard/', dashboard, name='dashboard'),
 
     # Minhas observações (CRUD)

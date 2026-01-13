@@ -1,10 +1,8 @@
 from django.urls import path
 from . import views
 
-app_name='clima'
-
 urlpatterns = [
-    path("", views.inicio, name="inicio"),
+    path("", views.index, name="clima"),
     path("mapa/", views.mapa, name="mapa"),
     path('mapa/', views.mapa_mar, name='mapa_mar'),
     # AVISOS METEOROLÓGICOS (tempo)

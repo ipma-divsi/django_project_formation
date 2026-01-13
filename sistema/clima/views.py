@@ -4,8 +4,8 @@ from .forms import ComentarioForm
 import requests
 
 
-def inicio(request):
-    return render(request, "publico/inicio.html")
+def index(request):
+    return render(request, "publico/index.html")
 
 
 CIDADES = [
@@ -28,7 +28,6 @@ CIDADES = [
     {"id": 1171400, "nome": "Vila Real", "lat": 41.3006, "lon": -7.7441},
     {"id": 1182300, "nome": "Viseu", "lat": 40.6566, "lon": -7.9125},
 ]
-
 
 def mapa(request):
     cidades_com_tempo = []
@@ -58,7 +57,7 @@ def mapa(request):
 
     avisos = AvisoMeteorologico.objects.all().order_by("-data")
 
-    return render(request, "publico/index.html", {
+    return render(request, "publico/tempo.html", {
         "cidades": cidades_com_tempo,
         "avisos": avisos
     })
