@@ -26,7 +26,7 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user:
             login(request, user)
-            return redirect('dashboard')
+            return redirect('core:dashboard')
         else:
             messages.error(request, "Username ou password incorretos")
 
@@ -41,7 +41,7 @@ def view_clima(request):
 # -------------------------
 def logout_view(request):
     logout(request)
-    return redirect('home')
+    return redirect('core:home')
 
 
 # -------------------------
@@ -70,7 +70,7 @@ def register_view(request):
         # Criar usuário (o signal em models.py já cria o Profile automaticamente)
         user = User.objects.create_user(username=username, email=email, password=password1)
         messages.success(request, "Conta criada com sucesso! Já podes fazer login.")
-        return redirect('login')
+        return redirect('core:login')
 
     return render(request, 'core/register.html')
 

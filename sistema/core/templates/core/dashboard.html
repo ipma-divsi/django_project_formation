@@ -23,7 +23,7 @@
                 <p style="color: green;">{{ message }}</p>
             {% endfor %}
 
-            <form method="post" action="{% url 'minhas_observacoes' %}">
+            <form method="post" action="{% url 'core:minhas_observacoes' %}">
                 {% csrf_token %}
                 {{ form.as_p }}
                 <button type="submit">Adicionar</button>
