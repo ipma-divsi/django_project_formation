@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'core',  # teu app principal
+    'core',  # teu app principal,
+    'clima',  # app clima
 ]
 
 

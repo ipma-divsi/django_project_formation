@@ -1,0 +1,8 @@
+<h1>{{ cidade }}</h1>
+
+{% for p in previsoes %}
+    <div class="card">
+        <strong>Data:</strong> {{ p.forecastDate }}<br>
+        🌡️ {{ p.tMin }}°C / {{ p.tMax }}°C
+    </div>
+{% endfor %}

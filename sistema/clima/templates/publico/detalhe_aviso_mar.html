@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ aviso.titulo }}</title>
+    <style>
+        /* RESET E BODY */
+        * { box-sizing: border-box; margin:0; padding:0; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fa;
+            color: #333;
+        }
+
+        /* CONTAINER PRINCIPAL */
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 30px 35px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        /* BOTÃO VOLTAR */
+        .btn-voltar {
+            display: inline-block;
+            margin-bottom: 20px;
+            text-decoration: none;
+            background: #1d3557;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn-voltar:hover {
+            background: #457b9d;
+        }
+
+        /* TÍTULO DO AVISO */
+        h1 {
+            color: #1d3557;
+            margin-bottom: 10px;
+        }
+
+        /* NÍVEL DE ALERTA */
+        .nivel {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+        }
+        .nivel.verde { background: #38b000; }
+        .nivel.amarelo { background: #ffbe0b; color: #333; }
+        .nivel.laranja { background: #fb5607; }
+        .nivel.vermelho { background: #d00000; }
+
+        /* DESCRIÇÃO DO AVISO */
+        p.descricao {
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+        }
+
+        hr {
+            border: none;
+            height: 1px;
+            background: #e0e0e0;
+            margin: 35px 0;
+        }
+
+        /* COMENTÁRIOS */
+        .titulo-comentarios {
+            color: #1d3557;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+        .comentarios {
+            margin-top: 15px;
+        }
+        .comentario {
+            background: #f7f9fc;
+            border-left: 4px solid #1d3557;
+            padding: 12px 18px;
+            margin-bottom: 14px;
+            border-radius: 6px;
+        }
+        .comentario-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: #555;
+            margin-bottom: 6px;
+        }
+        .sem-comentarios {
+            color: #777;
+            font-style: italic;
+            margin-top: 8px;
+        }
+
+        /* FORMULÁRIO DE COMENTÁRIO */
+        .form-comentario {
+            margin-top: 25px;
+            background: #f0f4f8;
+            padding: 18px;
+            border-radius: 8px;
+        }
+        .form-comentario h3 {
+            margin-bottom: 12px;
+            color: #1d3557;
+        }
+        .form-comentario input,
+        .form-comentario textarea {
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 12px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        .form-comentario input:focus,
+        .form-comentario textarea:focus {
+            border-color: #1d3557;
+            outline: none;
+        }
+        .form-comentario button {
+            background: #1d3557;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .form-comentario button:hover {
+            background: #457b9d;
+        }
+
+        /* RESPONSIVO */
+        @media (max-width: 600px) {
+            .container { padding: 20px; }
+            h1 { font-size: 1.6rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- BOTÃO VOLTAR -->
+    <a href="/" class="btn-voltar">⬅ Voltar ao Início</a>
+
+    <!-- TÍTULO E NÍVEL -->
+    <h1>{{ aviso.titulo }}</h1>
+    <span class="nivel {{ aviso.nivel }}">{{ aviso.get_nivel_display }}</span>
+
+    <!-- DESCRIÇÃO -->
+    <p class="descricao">{{ aviso.descricao }}</p>
+
+    <hr>
+
+    <!-- COMENTÁRIOS -->
+    <h2>💬 Comentários</h2>
+    <div class="comentarios">
+        {% for comentario in comentarios %}
+            <div class="comentario">
+                <div class="comentario-header">
+                    <strong>{{ comentario.nome }}</strong>
+                    <span>{{ comentario.data|date:"d/m/Y H:i" }}</span>
+                </div>
+                <p>{{ comentario.texto }}</p>
+            </div>
+        {% empty %}
+            <p>Ainda não há comentários.</p>
+        {% endfor %}
+    </div>
+
+    <!-- FORMULÁRIO -->
+    <div class="form-comentario">
+        <h3>Adicionar comentário</h3>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

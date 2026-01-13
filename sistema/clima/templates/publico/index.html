@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>IMA – Mapa Meteorológico</title>
+
+    <!-- Leaflet -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet/dist/leaflet.css"
+    />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #eef3f8;
+        }
+
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .top-bar {
+            background: white;
+            padding: 10px 20px;
+            border-bottom: 1px solid #ccc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .top-bar a {
+            color: #003366;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* LAYOUT */
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px;
+        }
+
+        /* AVISOS */
+        .avisos {
+            width: 300px;
+            background: white;
+            border-radius: 6px;
+            padding: 15px;
+            height: 500px;
+            overflow-y: auto;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .avisos h3 {
+            text-align: center;
+            color: #003366;
+            margin-top: 0;
+        }
+
+        .aviso {
+            border-left: 6px solid;
+            background: #f9f9f9;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .aviso:hover {
+            background: #ececec;
+        }
+
+        /* MAPA */
+        #map {
+            width: 700px;
+            height: 500px;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .popup {
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .icon {
+            font-size: 26px;
+        }
+
+        .temp {
+            font-weight: bold;
+        }
+       .menu {
+    background: #003366;
+    padding: 10px;
+}
+
+.menu a {
+    color: white;
+    margin-right: 20px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.menu a:hover {
+    text-decoration: underline;
+}
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f6fa;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #003366;
+    color: white;
+    padding: 15px;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    margin-top: 30px;
+}
+
+.card {
+    background: white;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-left: 6px solid #003366;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.nivel-Verde { border-color: green; }
+.nivel-Amarelo { border-color: orange; }
+.nivel-Laranja { border-color: darkorange; }
+.nivel-Vermelho { border-color: red; }
+
+a {
+    color: #003366;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+    </style>
+</head>
+<body>
+<nav class="menu">
+    <a href="{% url 'inicio' %}">Início</a>
+    <a href="{% url 'mapa' %}">Tempo</a>
+    <a href="{% url 'mar' %}">Mar</a>
+</nav>
+
+<header>
+    <h1>Instituto do Mar e da Atmosfera</h1>
+    <p>Mapa Meteorológico de Portugal</p>
+</header>
+
+<div class="top-bar">
+    <span>Previsão Meteorológica em Tempo Real</span>
+    
+</div>
+
+<div class="container">
+                
+    <!-- AVISOS -->
+    <div class="avisos">
+        <h3>⚠️ Avisos</h3>
+    
+        {% for aviso in avisos %}
+            <div class="aviso"
+                onclick="location.href='{% url 'detalhe_aviso' aviso.id %}'"
+                 style="border-left: 6px solid
+                 {% if aviso.nivel == 'verde' %}green
+                 {% elif aviso.nivel == 'amarelo' %}orange
+                 {% elif aviso.nivel == 'laranja' %}darkorange
+                 {% elif aviso.nivel == 'vermelho' %}red
+                 {% endif %};">
+                <strong>{{ aviso.titulo }}</strong><br>
+                {{ aviso.descricao|truncatechars:80 }}
+            </div>
+        {% empty %}
+            <p>Sem avisos Meteorológico.</p>
+        {% endfor %}
+    </div>
+
+    <!-- MAPA -->
+    <div id="map"></div>
+
+</div>
+
+<script>
+    
+    // Limites de Portugal
+    var limitesPortugal = [
+        [36.8, -9.6],
+        [42.3, -6.0]
+    ];
+
+    var map = L.map('map', {
+        maxBounds: limitesPortugal,
+        maxBoundsViscosity: 1.0,
+        minZoom: 6,
+        maxZoom: 9
+    }).setView([39.5, -8.0], 7);
+
+    // ✅ MAPA COLORIDO (NORMAL)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    // Cidades vindas do Django
+    var cidades = [
+        {% for c in cidades %}
+        {
+            nome: "{{ c.nome }}",
+            lat: {{ c.lat }},
+            lon: {{ c.lon }},
+            tmin: "{{ c.tmin }}",
+            tmax: "{{ c.tmax }}"
+        },
+        {% endfor %}
+    ];
+
+    function iconeClima(tmax) {
+        var t = parseFloat(tmax);
+        if (t >= 25) return "☀️";
+        if (t >= 15) return "⛅";
+        return "🌧️";
+    }
+
+    cidades.forEach(function(c) {
+        L.marker([c.lat, c.lon])
+            .addTo(map)
+            .bindPopup(
+                "<div class='popup'>" +
+                "<b>" + c.nome + "</b><br>" +
+                "<span class='icon'>" + iconeClima(c.tmax) + "</span><br>" +
+                "<span class='temp'>Mín: " + c.tmin + "°C<br>Máx: " + c.tmax + "°C</span>" +
+                "</div>"
+            );
+    });
+</script>
+
+</body>
+</html>
