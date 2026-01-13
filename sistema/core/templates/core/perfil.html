@@ -232,8 +232,8 @@
                     <p><strong>Local:</strong> {{ obs.local }}</p>
                     <p><strong>Valor:</strong> {{ obs.valor }}</p>
                     <p><small>{{ obs.created_at|date:"d/m/Y H:i" }}</small></p>
-                    <a href="{% url 'editar_observacao' obs.pk %}" class="btn-editar">Editar</a>
-                    <a href="{% url 'deletar_observacao' obs.pk %}" class="btn-deletar">Deletar</a>
+                        <a href="{% url 'core:editar_observacao' obs.pk %}" class="btn-editar">Editar</a>
+                        <a href="{% url 'core:deletar_observacao' obs.pk %}" class="btn-deletar">Deletar</a>
                 </div>
             {% empty %}
                 <p style="text-align:center; width:100%;">Ainda não tens observações adicionadas.</p>

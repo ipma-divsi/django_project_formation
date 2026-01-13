@@ -50,11 +50,11 @@
                     Valor: {{ obs.valor }}<br>
                     <small>{{ obs.created_at|date:"d/m/Y H:i" }}</small><br>
 
-                    <!-- Botão de editar -->
-                    <a class="btn-editar" href="{% url 'editar_observacao' obs.pk %}">Editar</a>
+                        <!-- Botão de editar -->
+                        <a class="btn-editar" href="{% url 'core:editar_observacao' obs.pk %}">Editar</a>
 
                     <!-- Botão de deletar -->
-                    <form method="post" action="{% url 'deletar_observacao' obs.pk %}" style="display:inline;">
+                    <form method="post" action="{% url 'core:deletar_observacao' obs.pk %}" style="display:inline;">
                         {% csrf_token %}
                         <button type="submit" class="btn-deletar">Deletar</button>
                     </form>

@@ -31,8 +31,8 @@
                     Valor: {{ obs.valor }}<br>
                     <small>Criado em {{ obs.created_at|date:"d/m/Y H:i" }}</small><br>
                     <!-- Botões de Editar e Deletar -->
-                    <a href="{% url 'editar_observacao' obs.id %}" class="btn-editar">Editar</a>
-                    <form method="post" action="{% url 'deletar_observacao' obs.id %}" style="display:inline;">
+                    <a href="{% url 'core:editar_observacao' obs.id %}" class="btn-editar">Editar</a>
+                    <form method="post" action="{% url 'core:deletar_observacao' obs.id %}" style="display:inline;">
                         {% csrf_token %}
                         <button type="submit" class="btn-deletar">Deletar</button>
                     </form>

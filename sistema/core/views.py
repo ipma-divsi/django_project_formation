@@ -116,7 +116,7 @@ def minhas_observacoes(request):
             nova_obs.user = request.user
             nova_obs.save()
             messages.success(request, "Observação adicionada com sucesso!")
-            return redirect('minhas_observacoes')
+            return redirect('core:minhas_observacoes')
     else:
         form = ObservacaoForm()
 
@@ -134,7 +134,7 @@ def editar_observacao(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, "Observação atualizada com sucesso!")
-            return redirect('minhas_observacoes')
+            return redirect('core:minhas_observacoes')
     else:
         form = ObservacaoForm(instance=obs)
 
@@ -147,7 +147,7 @@ def deletar_observacao(request, pk):
     if request.method == 'POST':
         obs.delete()
         messages.success(request, "Observação deletada com sucesso!")
-        return redirect('minhas_observacoes')
+        return redirect('core:minhas_observacoes')
 
     return render(request, 'core/deletar_observacao.html', {'observacao': obs})
 
@@ -186,7 +186,7 @@ def perfil(request):
                 user_form.save()
                 profile_form.save()
                 messages.success(request, "Perfil atualizado com sucesso!")
-                return redirect('perfil')
+                return redirect('core:perfil')
 
         # Alterar senha
         elif 'change_password' in request.POST:
@@ -195,7 +195,7 @@ def perfil(request):
                 user = password_form.save()
                 update_session_auth_hash(request, user)
                 messages.success(request, "Senha alterada com sucesso!")
-                return redirect('perfil')
+                return redirect('core:perfil')
 
         # Adicionar observação
         elif 'add_obs' in request.POST:

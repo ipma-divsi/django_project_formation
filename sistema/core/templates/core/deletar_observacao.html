@@ -11,7 +11,7 @@
             <form method="post">
                 {% csrf_token %}
                 <button type="submit" style="background-color:#D32F2F; color:white;">Deletar</button>
-                <a href="{% url 'dashboard' %}" style="margin-left: 10px; text-decoration:none;">Cancelar</a>
+                <a href="{% url 'core:dashboard' %}" style="margin-left: 10px; text-decoration:none;">Cancelar</a>
             </form>
         </div>
     </div>
