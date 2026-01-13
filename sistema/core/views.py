@@ -33,6 +33,9 @@ def login_view(request):
     return render(request, 'core/login.html')
 
 
+def view_clima(request):
+    return render(request,'clima/inicio.html')
+
 # -------------------------
 # LOGOUT
 # -------------------------

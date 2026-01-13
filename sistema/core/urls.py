@@ -1,8 +1,8 @@
-from django.urls import path
+from django.urls import path, include
 from .views import (
     home, login_view, dashboard, logout_view, register_view,
     editar_observacao, deletar_observacao, feed, minhas_observacoes,
-    perfil, mapa
+    perfil, mapa, view_clima
 )
 
 urlpatterns = [
@@ -10,7 +10,7 @@ urlpatterns = [
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
     path('register/', register_view, name='register'),
-
+    path('clima/', include('clima.urls')),
     path('dashboard/', dashboard, name='dashboard'),
 
     # Minhas observações (CRUD)
