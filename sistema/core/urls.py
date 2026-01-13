@@ -2,7 +2,7 @@ from django.urls import path
 from .views import (
     home, login_view, dashboard, logout_view, register_view,
     editar_observacao, deletar_observacao, feed, minhas_observacoes,
-    perfil
+    perfil, mapa
 )
 
 urlpatterns = [
@@ -23,4 +23,6 @@ urlpatterns = [
 
     # Perfil do usuário
     path('perfil/', perfil, name='perfil'),
+    # Mapa com observações
+    path('mapa/', mapa, name='mapa'),
 ]

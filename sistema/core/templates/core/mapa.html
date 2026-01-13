@@ -1,0 +1,117 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Mapa de Observações{% endblock %}
+
+{% block content %}
+<h1>Mapa de Observações (Portugal)</h1>
+<div class="map-container" style="max-width:900px; margin:0 auto;">
+    <div id="map" style="height:400px; width:100%; border:1px solid #ddd; border-radius:6px;"></div>
+</div>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+    // const markers = {{ markers_json|safe }};
+
+    const map = L.map('map').setView([39.5, -8.0], 6);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    if (markers.length === 0) {
+        // Opcional: mostrar mensagem se não houver marcadores
+        const info = L.control({position: 'topright'});
+        info.onAdd = function () {
+            const div = L.DomUtil.create('div', 'info');
+            div.style.background = 'white';
+            div.style.padding = '6px 8px';
+            div.style.borderRadius = '4px';
+            div.innerHTML = '<b>Nenhuma observação encontrada no mapa.</b>';
+            return div;
+        };
+        info.addTo(map);
+    }
+
+    // Cria um ícone SVG em forma de pino de referência colorido
+    function createPinIcon(color) {
+        const svg = `
+            <svg width="32" height="40" viewBox="0 0 32 40" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 2 C10 2 6 6 6 12 C6 20 16 38 16 38 C16 38 26 20 26 12 C26 6 22 2 16 2 Z" fill="${color}" stroke="#000" stroke-width="0.8"/>
+                <circle cx="16" cy="12" r="4" fill="white" stroke="#000" stroke-width="0.5"/>
+            </svg>`;
+
+        return L.divIcon({
+            className: '',
+            html: svg,
+            iconSize: [32, 40],
+            iconAnchor: [16, 40]
+        });
+    }
+
+    markers.forEach(m => {
+        const intensity = (m.intensity === null || m.intensity === undefined) ? null : Number(m.intensity);
+        const tipo = m.tipo || 'Outro';
+        let color = '#3388ff';
+
+        if (intensity !== null) {
+            // Escalas reais por tipo
+            if (tipo === 'Temp') {
+                // Temperatura: verde 15-27°C (perfeito), amarelo 0-15 ou 27-40°C, vermelho <0 ou >40°C
+                if (intensity < 0 || intensity > 40) color = '#d73027';
+                else if (intensity < 15 || intensity > 27) color = '#fee08b';
+                else color = '#1a9850';
+            } else if (tipo === 'Precip') {
+                // Precipitação: verde <25mm, amarelo 25-75mm, laranja 75-150mm, vermelho >150mm
+                if (intensity >= 150) color = '#d73027';
+                else if (intensity >= 75) color = '#fc8d59';
+                else if (intensity >= 25) color = '#fee08b';
+                else color = '#1a9850';
+            } else if (tipo === 'Vento') {
+                // Vento: verde <20 km/h, amarelo 20-40 km/h, laranja 40-70 km/h, vermelho >70 km/h
+                if (intensity >= 70) color = '#d73027';
+                else if (intensity >= 40) color = '#fc8d59';
+                else if (intensity >= 20) color = '#fee08b';
+                else color = '#1a9850';
+            } else if (tipo === 'Ondas') {
+                // Ondas: verde <2m, amarelo 2-4m, laranja 4-7m, vermelho >7m
+                if (intensity >= 7) color = '#d73027';
+                else if (intensity >= 4) color = '#fc8d59';
+                else if (intensity >= 2) color = '#fee08b';
+                else color = '#1a9850';
+            } else if (tipo === 'Sismos') {
+                // Magnitude: verde <3, amarelo 3-4, laranja 4-6, vermelho >6
+                if (intensity >= 6) color = '#d73027';
+                else if (intensity >= 4) color = '#fc8d59';
+                else if (intensity >= 3) color = '#fee08b';
+                else color = '#1a9850';
+            }
+        }
+
+        const marker = L.marker([m.lat, m.lng], {icon: createPinIcon(color)}).addTo(map);
+
+        const popup = `<b>${m.titulo}</b><br/>Usuário: ${m.user}<br/>Tipo: ${m.tipo_display}<br/>Local: ${m.local}<br/>Valor: ${m.valor} ${m.unidade}`;
+        marker.bindPopup(popup);
+    });
+
+    // Pequena legenda
+    const legend = L.control({position: 'bottomright'});
+    legend.onAdd = function () {
+        const div = L.DomUtil.create('div', 'info legend');
+        div.style.background = 'white';
+        div.style.padding = '6px 8px';
+        div.style.borderRadius = '4px';
+        div.innerHTML = '<b>Intensidade</b><br/>' +
+            '<span style="display:inline-block;width:12px;height:12px;background:#1a9850;margin-right:6px"></span> Baixa<br/>' +
+            '<span style="display:inline-block;width:12px;height:12px;background:#fee08b;margin-right:6px"></span> Média-Baixa<br/>' +
+            '<span style="display:inline-block;width:12px;height:12px;background:#fc8d59;margin-right:6px"></span> Média-Alta<br/>' +
+            '<span style="display:inline-block;width:12px;height:12px;background:#d73027;margin-right:6px"></span> Alta<br/>';
+        return div;
+    };
+    legend.addTo(map);
+</script>
+
+{% endblock %}

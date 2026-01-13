@@ -9,7 +9,7 @@ Este projeto consiste no desenvolvimento de um sistema web chamado "IPEMA" inspi
 - Exibir feeds globais com observações de todos os utilizadores.
 - Proporcionar uma interface moderna e responsiva, fácil de usar.
 - Implementar autenticação e gestão de perfis de utilizador.
-
+teste
 ## 🛠️ Tecnologias
 - Linguagem: Python
 - Frameworks: Django
@@ -91,4 +91,4 @@ django_project_formation/
 
 Ana
 Orientador: <teu nome>
-# Projeto de Estágio – Luis belchior
+# Projeto de Estágio – Luis Belchior e Ana Alves
