@@ -1,37 +1,51 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
     <title>{{ aviso.titulo }}</title>
 
-    
+   
+
     <style>
+        /* GLOBAL */
         body {
-            font-family: Arial, sans-serif;
-            background: #eef3f8;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to bottom, #e0f7fa, #ffffff);
             margin: 0;
             padding: 0;
+            color: #222;
         }
 
+        a {
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        a:hover {
+            color: #00509e;
+        }
+
+        /* CONTAINER PRINCIPAL */
         .container {
             max-width: 900px;
             margin: 30px auto;
             background: white;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
         }
 
         /* BOTÃO VOLTAR */
         .btn-voltar {
             display: inline-block;
             margin-bottom: 20px;
-            text-decoration: none;
             background: #003366;
             color: white;
-            padding: 8px 14px;
-            border-radius: 4px;
+            padding: 10px 16px;
+            border-radius: 6px;
             font-weight: bold;
+            transition: 0.3s;
         }
 
         .btn-voltar:hover {
@@ -43,27 +57,33 @@
             margin-top: 0;
         }
 
+        /* NÍVEL ALERTA */
         .nivel {
             display: inline-block;
-            padding: 6px 12px;
-            border-radius: 4px;
+            padding: 8px 14px;
+            border-radius: 6px;
             font-weight: bold;
             color: white;
             margin-bottom: 15px;
+            font-size: 14px;
         }
 
-        .nivel.verde { background: green; }
-        .nivel.amarelo { background: #f1c40f; color: black; }
-        .nivel.laranja { background: orange; }
-        .nivel.vermelho { background: red; }
+        .nivel.verde { background: #28a745; }
+        .nivel.amarelo { background: #f1c40f; color: #222; }
+        .nivel.laranja { background: #fd7e14; }
+        .nivel.vermelho { background: #dc3545; }
 
         hr {
             margin: 30px 0;
+            border: none;
+            height: 1px;
+            background: #ddd;
         }
 
         /* COMENTÁRIOS */
         .titulo-comentarios {
             color: #003366;
+            margin-bottom: 15px;
         }
 
         .comentarios {
@@ -71,11 +91,17 @@
         }
 
         .comentario {
-            background: #f7f9fb;
-            border-left: 4px solid #003366;
-            padding: 10px 15px;
-            margin-bottom: 12px;
-            border-radius: 4px;
+            background: #f0f9ff;
+            border-left: 6px solid #003366;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+
+        .comentario:hover {
+            transform: translateX(3px);
         }
 
         .comentario-header {
@@ -83,7 +109,7 @@
             justify-content: space-between;
             font-size: 13px;
             color: #555;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
         }
 
         .sem-comentarios {
@@ -94,33 +120,59 @@
         /* FORMULÁRIO */
         .form-comentario {
             margin-top: 25px;
-            background: #f2f6fa;
-            padding: 15px;
-            border-radius: 6px;
+            background: #e0f7fa;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .form-comentario h3 {
+            margin-top: 0;
+            color: #003366;
         }
 
         .form-comentario input,
         .form-comentario textarea {
             width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 12px;
+            border-radius: 6px;
             border: 1px solid #ccc;
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            transition: border 0.2s;
+        }
+
+        .form-comentario input:focus,
+        .form-comentario textarea:focus {
+            outline: none;
+            border-color: #00509e;
         }
 
         .form-comentario button {
             background: #003366;
             color: white;
             border: none;
-            padding: 10px 18px;
-            border-radius: 4px;
+            padding: 12px 20px;
+            border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
+            transition: background 0.3s, transform 0.2s;
         }
 
         .form-comentario button:hover {
             background: #00509e;
+            transform: translateY(-2px);
         }
+
+        /* RESPONSIVO */
+        @media (max-width: 600px) {
+            .container {
+                margin: 20px 15px;
+                padding: 20px;
+            }
+        }
+
     </style>
 </head>
 
@@ -129,7 +181,9 @@
 <div class="container">
 
     <!-- BOTÃO VOLTAR -->
-    <a href="/" class="btn-voltar">⬅ Voltar ao Inicio</a>
+   
+   <a href="{% url 'mapa' %}" class="btn-voltar">⬅ Voltar ao Mapa do Tempo</a>
+
 
     <h1>{{ aviso.titulo }}</h1>
 

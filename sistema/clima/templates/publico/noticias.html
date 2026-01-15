@@ -83,11 +83,6 @@
             margin-bottom:20px;
             border-radius:8px;
             overflow:hidden;
-            transition: transform 0.2s;
-        }
-
-        .news-item:hover {
-            transform: translateY(-3px);
         }
 
         .news-item img {
@@ -109,14 +104,6 @@
             font-size:0.9rem;
             color:#666;
             margin-bottom:8px;
-        }
-
-        .news-item a {
-            display:flex;
-            gap:15px;
-            color:inherit;
-            text-decoration:none;
-            width:100%;
         }
 
         /* PAGINATION */
@@ -141,7 +128,7 @@
 
         /* RESPONSIVE */
         @media(max-width:768px){
-            .news-item a {
+            .news-item {
                 flex-direction:column;
             }
 
@@ -163,7 +150,7 @@
         <div class="logo">IPMA Style</div>
         <nav>
             <ul>
-                <li><a href="{% url 'clima:clima' %}">Início</a></li>
+                <li><a href="{% url 'inicio' %}">Início</a></li>
                 <li><a href="{% url 'noticias' %}" class="active">Notícias</a></li>
             </ul>
         </nav>
@@ -174,27 +161,25 @@
     <h2>Notícias de {{ ano_atual }}</h2>
 
     <ul class="news-list">
-        {% for noticia in noticias %}
-            <li class="news-item">
-                <a href="{% url 'detalhe_noticia' noticia.id %}">
+{% for noticia in noticias %}
+<li class="news-item">
+  <a href="{% url 'detalhe_noticia' noticia.id %}">
+    
+    {% if noticia.imagem %}
+      <img src="{{ noticia.imagem.url }}" alt="{{ noticia.titulo }}">
+    {% endif %}
 
-                    {% if noticia.imagem %}
-                        <img src="{{ noticia.imagem.url }}" alt="{{ noticia.titulo }}">
-                    {% else %}
-                        <img src="{% static 'img/noticia_default.jpg' %}" alt="Notícia">
-                    {% endif %}
+    <div class="news-content">
+      <h3>{{ noticia.titulo }}</h3>
+      <p class="news-date">{{ noticia.data|date:"d/m/Y" }}</p>
+      <p class="news-summary">
+        {{ noticia.descricao|truncatechars:150 }}
+      </p>
+    </div>
 
-                    <div class="news-content">
-                        <h3>{{ noticia.titulo }}</h3>
-                        <p class="news-date">{{ noticia.data|date:"d/m/Y" }}</p>
-                        <p>{{ noticia.descricao|truncatechars:120 }}</p>
-                    </div>
-
-                </a>
-            </li>
-        {% empty %}
-            <p>Não existem notícias para este ano.</p>
-        {% endfor %}
+  </a>
+</li>
+{% endfor %}
     </ul>
 
     <nav class="pagination">

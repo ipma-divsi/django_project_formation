@@ -16,6 +16,39 @@
         .avisos { width: 300px; background: white; padding: 15px; border-radius: 6px; }
         .aviso { padding: 10px; margin-bottom: 10px; cursor: pointer; }
         #map { width: 700px; height: 500px; }
+        /* DROPDOWN MENU */
+       .dropdown {
+        position: relative;
+         display: inline-block;
+        }
+
+        .dropbtn {
+        color: white;
+        cursor: pointer;
+        }
+
+        .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: white;
+        min-width: 260px;
+        box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        border-radius: 8px;
+        z-index: 1000;
+        margin-top: 10px;
+        }
+
+        .dropdown-content a {
+        color: #003366;
+        padding: 12px 18px;
+        display: block;
+        font-weight: normal;
+        }
+
+        .dropdown-content a:hover {
+        background-color: #f0f7ff;
+        border-radius: 8px;
+        }
         
     </style>
 </head>
@@ -23,9 +56,17 @@
 <body>
 
 <nav class="menu">
-    <a href="{% url 'clima:clima' %}">Início</a>
-    <a href="{% url 'clima:mapa' %}">Tempo</a>
-    <a href="{% url 'clima:mar' %}">Mar</a>
+    <a href="{% url 'inicio' %}">Início</a>
+    <div class="dropdown">
+    <a href="javascript:void(0)" class="dropbtn" onclick="toggleMenu()">Tempo ▾</a>
+    <div class="dropdown-content" id="submenu-tempo">
+        <a href="{% url 'mapa' %}">Previsão do tempo</a>
+        <a href="{% url 'previsao_10_dias' %}"> Previsão 5 dias e horários</a>
+        <a href="{% url 'previsao_descritiva' %}">Previsão descritiva</a>
+        <a href="{% url 'estacoes_online' %}"> Estações online</a>
+    </div>
+    <a href="{% url 'mar' %}">Mar</a>
+    <a href="{% url 'noticias' %}">Notícias</a>
 </nav>
 
 <div class="container">
@@ -54,21 +95,39 @@
     <div id="map"></div>
 
 </div>
-
 <script>
-    
-    const map = L.map('map').setView([39.5, -8.0], 7);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+var limitesPortugal = [
+    [32.5, -31.5],  // sudoeste Açores
+    [42.5, -6.0]    // nordeste Portugal continental
+];
 
-    {% for praia in praias %}
-        L.marker([{{ praia.latitude }}, {{ praia.longitude }}]).addTo(map)
-        .bindPopup(`
-            <strong>{{ praia.nome }}</strong><br>
-            🌊 Altura da onda: {{ praia.altura_onda }} m<br>
-            🧭 Direção: {{ praia.direcao_onda }}<br>
-            🌡️ Temp: {{ praia.temp_agua }} °C
-        `);
-    {% endfor %}
+var map = L.map('map', {
+    maxBounds: limitesPortugal,
+    maxBoundsViscosity: 1.0,
+    minZoom: 5,
+    maxZoom: 9
+}).setView([38.5, -10.0], 6);
+
+// Tiles
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap'
+}).addTo(map);
 </script>
+<script>
+function toggleMenu() {
+    const menu = document.getElementById("submenu-tempo");
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
+}
+
+document.addEventListener("click", function(e) {
+    const dropdown = document.querySelector(".dropdown");
+    const menu = document.getElementById("submenu-tempo");
+
+    if (!dropdown.contains(e.target)) {
+        menu.style.display = "none";
+    }
+});
+</script>
+
 </body>
 </html>
