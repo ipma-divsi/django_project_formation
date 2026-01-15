@@ -6,7 +6,7 @@ app_name = "clima"
 urlpatterns = [
     path("", views.index, name="clima"),
     path("mapa/", views.mapa, name="mapa"),
-    path('mapa/', views.mapa_mar, name='mapa_mar'),
+    path('mapa_mar/', views.mapa_mar, name='mapa_mar'),
     # AVISOS METEOROLÓGICOS (tempo)
     path("aviso/<int:id>/", views.detalhe_aviso, name="detalhe_aviso"),
 
