@@ -138,19 +138,19 @@
 <header>
     <h1>Instituto do Mar e da Atmosfera (IMA)</h1>
     <nav class="menu">
-        <a href="{% url 'inicio' %}">Início</a>
+        <a href="{% url 'clima:inicio' %}">Início</a>
     <div class="dropdown">
     <a href="javascript:void(0)" class="dropbtn" onclick="toggleMenu()">Tempo ▾</a>
     <div class="dropdown-content" id="submenu-tempo">
-        <a href="{% url 'mapa' %}">Previsão do tempo</a>
-        <a href="{% url 'previsao_10_dias' %}"> Previsão 5 dias e horários</a>
-        <a href="{% url 'previsao_descritiva' %}">Previsão descritiva</a>
-        <a href="{% url 'estacoes_online' %}"> Estações online</a>
+        <a href="{% url 'clima:mapa' %}">Previsão do tempo</a>
+        <a href="{% url 'clima:previsao_10_dias' %}"> Previsão 5 dias e horários</a>
+        <a href="{% url 'clima:previsao_descritiva' %}">Previsão descritiva</a>
+        <a href="{% url 'clima:estacoes_online' %}"> Estações online</a>
     </div>
 </div>
 
-        <a href="{% url 'mar' %}">Mar</a>
-        <a href="{% url 'noticias' %}">Notícias</a>
+        <a href="{% url 'clima:mar' %}">Mar</a>
+        <a href="{% url 'clima:noticias' %}">Notícias</a>
     </nav>
 </header>
 

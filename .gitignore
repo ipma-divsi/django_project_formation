@@ -207,8 +207,9 @@ marimo/_lsp/
 __marimo__/
 
 
+# Ignorar midia do core
+media/profile_pics/*
+
 # Ignorar imagens PNG e JPG
-*.png
-*.jpg
-*.jpeg
+
 .sqlite3

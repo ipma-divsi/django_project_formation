@@ -200,19 +200,19 @@
 
 <!-- MENU -->
 <nav class="menu">
-    <a href="{% url 'inicio' %}">Início</a>
+    <a href="{% url 'clima:inicio' %}">Início</a>
     <div class="dropdown">
     <a href="javascript:void(0)" class="dropbtn" onclick="toggleMenu()">Tempo ▾</a>
     <div class="dropdown-content" id="submenu-tempo">
-        <a href="{% url 'previsao_10_dias' %}"> Previsão 5 dias e horários</a>
-        <a href="{% url 'previsao_descritiva' %}">Previsão descritiva</a>
-        <a href="{% url 'estacoes_online' %}">Estações online</a>
+        <a href="{% url 'clima:previsao_10_dias' %}"> Previsão 5 dias e horários</a>
+        <a href="{% url 'clima:previsao_descritiva' %}">Previsão descritiva</a>
+        <a href="{% url 'clima:estacoes_online' %}">Estações online</a>
     </div>
 </div>
 
     </div>
-    <a href="{% url 'mar' %}">Mar</a>
-    <a href="{% url 'noticias' %}">Notícias</a>
+    <a href="{% url 'clima:mar' %}">Mar</a>
+    <a href="{% url 'clima:noticias' %}">Notícias</a>
 </nav>
 
 <!-- HEADER -->
